@@ -79,11 +79,6 @@ async function run() {
       const cursor = productCollection.find(query);
       const myProduct = await cursor.toArray();
       res.send(myProduct);
-      // if (email === decodedEmail) {
-
-      // } else {
-      //   res.status(403).send({ message: "forbidden access" });
-      // }
     });
   } finally {
   }
