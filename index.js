@@ -25,7 +25,7 @@ async function run() {
       .db("warehouse")
       .collection("stationary-product");
 
-    // products 
+    // products
     app.get("/products", async (req, res) => {
       const query = {};
       const cursor = productCollection.find(query);
@@ -41,6 +41,50 @@ async function run() {
       res.send(product);
     });
 
+    // product post
+    app.post("/product", async (req, res) => {
+      const newService = req.body;
+      const result = await productCollection.insertOne(newService);
+      res.send(result);
+    });
+
+    // product quantity updated
+    app.put("/manage/:id", async (req, res) => {
+      const id = req.params.id;
+      const updatedQuantity = req.body;
+      const query = { _id: ObjectId(id) };
+      const options = { upsert: true };
+      const updateQuantity = { $set: { quantity: updatedQuantity.quantity } };
+      const stockItem = await productCollection.updateOne(
+        query,
+        updateQuantity,
+        options
+      );
+      res.send({ massage: stockItem });
+    });
+    
+
+    // Product Delete
+    app.delete("/product/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const result = await productCollection.deleteOne(query);
+      res.send(result);
+    });
+
+    // my Product get
+    app.get("/myProduct", async (req, res) => {
+      const email = req.query.email;
+      const query = { email: email };
+      const cursor = productCollection.find(query);
+      const myProduct = await cursor.toArray();
+      res.send(myProduct);
+      // if (email === decodedEmail) {
+
+      // } else {
+      //   res.status(403).send({ message: "forbidden access" });
+      // }
+    });
   } finally {
   }
 }
