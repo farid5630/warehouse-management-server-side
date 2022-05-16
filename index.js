@@ -10,7 +10,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// warehouseStore:HNtDQJLJFfVcXu6F
+// mongo db connection 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.4zoya.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, {
   useNewUrlParser: true,
@@ -26,12 +26,7 @@ async function run() {
       .collection("stationary-product");
 
     // products
-    app.get("/products", async (req, res) => {
-      const query = {};
-      const cursor = productCollection.find(query);
-      const products = await cursor.toArray();
-      res.send(products);
-    });
+    
 
     // manage product list
     app.get("/manage/:id", async (req, res) => {
