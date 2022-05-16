@@ -26,7 +26,12 @@ async function run() {
       .collection("stationary-product");
 
     // products
-    
+    app.get("/products", async (req, res) => {
+      const query = {};
+      const cursor = productCollection.find(query);
+      const products = await cursor.toArray();
+      res.send(products);
+    });
 
     // manage product list
     app.get("/manage/:id", async (req, res) => {
